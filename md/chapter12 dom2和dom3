@@ -1,0 +1,19 @@
+##DOM2和DOM3
+DOM1级主要定义的是HTML和XML文档的底层结构。DOM2和DOM3则在这个结构的基础上引入了  
+更多的交互能力。 也支持了更高级的XML特性。所以DOM2和DOM3引入了更多模块
+###针对XML命名空间的变化
+有了XML命名空间，不同XML文档元素就可以混合在一起，共同构成格式良好的文档。而不  
+必担心发生命名冲突。技术上HTML不支持XML命名空间，XHTML支持，所以本节给出的是XHTML  
+的示例。
+- 命名空间要使用xmlns特性来指定，XHTML的命名空间是http://www/w3.org/1999/xhtml,  
+在任何格式良好的XHTML页面中，都应该包含在html元素之中（命名空间就是把变量放到不同的空间，他们可以重名，就像北京的小明和上海的小明）
+
+<xhtml:html xmlns:xhtml= "http://www.w3.org/1999/xhtml">
+<xhtml:head>
+    <xhtml:title>example xhtml page</xhtml:title>
+    <xhtml:body> HEllo world
+    </xhtml:body>
+</xhtml:html>
+这里为XHTML的命名空间定义了一个名为xhtml的前缀，并要求所有xhtml元素都以该前缀开头。，在混合使用两种语言时候，命名空间作用就打了
+‘
+；

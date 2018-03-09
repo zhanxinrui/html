@@ -1,0 +1,548 @@
+
+
+##引用类型
+- 引用类型的值是对象，或者说对象是某个特定引用类型的实力，新对象是使用new操作符后跟一个构造函数来创建的。构造函数本身就是个函数。引用类型常常被称为类，但由于引用类型不具备类的基本结构，也被称为对象定义。和类不同
+### Object引用类型
+- 创建方法
+ ①`var person = new Object();`//Object是构造函数，也是一个引用类型，Object类型
+    `person.name = "Captain Hook";`
+    ②对象字面量：`var person = {name:"Captain HooK"};`
+- 访问属性时：①：person["name"]//像字典
+            ②person.name//点表示法
+            但是对于属性为first name这种用点表示法就会出错
+- 所有的字面量创造法都不会使用Array构造函数
+
+###Array类型
+- 一个array类型的数组元素可以是任何类型的,但有序
+- 创建方法：
+①var colors  = new Array();
+var colors = new Array(20);//20 个
+var colors = new Array("red","orange");
+- 上面的new都可以省略
+②var colors = ["orange","red"];//不要var colors = ["orange","red",]可能会创建3项
+- 访问属性：
+   colors[0]
+   colors.length = 4;//通过索引可以增减项
+- 检测数组
+  使用 instanceof 就可以 eg:`arrayA instanceof Array`,但是instanceof嘉定只有一个全局执行环境，如果有多个框架就失效，从而Array.isArray(检测对象)就可以实现。
+- 转换方法
+```javascript
+<script>
+var colors = ["red","blue","green"];
+alert(colors.toString());
+alert(colors.valueOf());
+alert(colors);//三个返回值都是red,blue,green
+</script>
+
+```
+后两种，第一个valueOf返回的还是数组，但是要显示，所以调用了toString(),第二个也是因为alert()需要接受字符串参数，就后台调用toString();
+
+-也可以在对象中自定义方法 ：
+```javascript
+var person = {
+    toLocaleString: function(){
+    return "captain";
+    }
+    toString: function(){
+    return "Hook";
+    }   
+}
+```
+- 分隔符：
+alert(colors.join("|"));数组的每一项都会用|来隔开
+
+- 栈方法(FIFO)：
+ eg.: ```var colors = new Array();
+        var count = colors.push('1','2');//推进去两项，返回的是项数
+        var item = colors.pop();//返回弹出的值
+      ```
+- 队列法(LIFO)：
+ ``` var colors = new Array();
+    var count = colors.push(1,2);
+    var item =  colors.shift();//队列第一项
+    var count = colors.unshift(3,4);//从第一位开始push，和shift相反，通过和pop结合可以形成一个反向的队列
+ ```
+ -排列方法
+ colors.reverse();//反向排列
+ colors.sort();//排序
+ ```javascript
+    <script>
+    var values = [1,2,3,4,5,10,15];
+    values.sort();
+    alert(values);//非正常顺序
+</script>
+ ```
+和c语言一样需要接受一个compare函数,需要自己编写：
+可以如下： ```
+            function compare(value1,value2){
+                if(value1<value2){
+                    return -1;
+                }
+                else if (value1>value2){
+                return -1;
+                }
+                else{
+                return 0;
+                }
+                //对于数值型的只需要value1-value2就可以了
+            }
+            values.sort(compare);
+        ```
+
+- 操作方法
+concat：拼接
+```
+colors1 = colors.concat("yellow","black");//参数可以是数组，colors不变
+```
+slice:切片
+colors2= colors.slice(1,4);//从1号元素，就是第二个开始到3号元素，如果第二个不填默认到末尾，如果得到的是负数，则加上数组长度最多加一次,最终返回属于正数的那一部分
+
+- splice:
+1.删除： splice(0,2);//splice(第一参数为起始的位置，删除的项数)
+2.插入 ： splice(2,0,"red","green");//第一个参数 是起始位置，第二维删除项数，第三以后为插入的值
+3.替换：splice(2,1,"red");//就将第3项删除，然后插入red相当于替换了
+
+- 位置方法
+alert(colors.indexOf("red"));//从前开会找，找到返回对应的从0开始数的位置
+lastIndexOf//从后开始找
+
+-迭代方法
+every():对数组的每一项运行给定的函数，如果都返回true，则返回true
+some():对数组的每一项运行给定的函数，某一项返回true，就返回true
+filter():对数组的每一项运行给定的函数，返回值为true的元素构成的数组
+forEach():对数组的每一项运行给定的函数，无返回值
+map():对数组中的每一项运行给定的函数，返回每一项运行的的结果构成的数组；
+
+传入这些方法中的函数会自动获取三个参数item,index,array分别为这一项的值，位置，和对象本身，命名可以随意：
+```javascript
+numbers = [1,2,3,4];
+var everyResult = numbers.every(function(item,index,array)}{return (item>2)})
+```
+- 归并方法
+ reduce（）从数组的第一项，逐个遍历到最后，reduceRight() 从最后一项便利到第一项
+```
+ var values = [1,2,3,4,5]
+ var sum = values.reduce(function(pre,cur,index,array){//传入方法的函数自动获取分别为前一项，现在项，索引值，数组
+    return prev+cur；//sum最终为15
+ })
+ ```
+ ### Date 类型
+ - 创造 var now = new Date();
+ - 给Date不传递参数的情况下，默认自动获取当前的时间和日期，人为设定有两个方法(给Date传入的都是字符串表示的毫秒数，1970年开始)：
+ 
+    ①：Date.parse()
+    接受 "6/13/2004";  "January 12,2004" "Tues May 25 2004 00:00:00 GMT-0700"
+    如var someDate = new Date(Date.parse("January 12,2004"));
+    //如果字符串是超出范围，不同浏览器的解释不同
+    ② Date.UTC()
+    特点，月份基于0开始， 只有年月是必须提供的，如果没有月中的天数，则默认1；
+    //GMT时间 2000年1月1日
+    var y2k = new Date(Date.UTC(2000,0));
+    //GMT时间2005年5月5日下午5:55:55
+    var allFives = new Date(Date.UTC(2005,4,5,17,55,55));
+
+- Date构造函数会自动模仿parse和UTC方法，所以即使不写parse和UTC也可以得到相应的对象，只不过都基于本地时区
+- ECMAscript添加了Date.now方法，可以返回调用这个方法时的日期和时间的毫秒数
+- Date类型也重写了toLocaleString(),toString( ) valueOf(),但不同浏览器结果不同，所以前两个没什么用，valueOf则是返回了日期的毫秒数
+
+
+```
+方法  描述
+Date()  返回当日的日期和时间。
+getDate()   从 Date 对象返回一个月中的某一天 (1 ~ 31)。
+getDay()    从 Date 对象返回一周中的某一天 (0 ~ 6)。
+getMonth()  从 Date 对象返回月份 (0 ~ 11)。
+getFullYear()   从 Date 对象以四位数字返回年份。
+getYear()   请使用 getFullYear() 方法代替。
+getHours()  返回 Date 对象的小时 (0 ~ 23)。
+getMinutes()    返回 Date 对象的分钟 (0 ~ 59)。
+getSeconds()    返回 Date 对象的秒数 (0 ~ 59)。
+getMilliseconds()   返回 Date 对象的毫秒(0 ~ 999)。
+getTime()   返回 1970 年 1 月 1 日至今的毫秒数。
+getTimezoneOffset() 返回本地时间与格林威治标准时间 (GMT) 的分钟差。
+getUTCDate()    根据世界时从 Date 对象返回月中的一天 (1 ~ 31)。
+getUTCDay() 根据世界时从 Date 对象返回周中的一天 (0 ~ 6)。
+getUTCMonth()   根据世界时从 Date 对象返回月份 (0 ~ 11)。
+getUTCFullYear()    根据世界时从 Date 对象返回四位数的年份。
+getUTCHours()   根据世界时返回 Date 对象的小时 (0 ~ 23)。
+getUTCMinutes() 根据世界时返回 Date 对象的分钟 (0 ~ 59)。
+getUTCSeconds() 根据世界时返回 Date 对象的秒钟 (0 ~ 59)。
+getUTCMilliseconds()    根据世界时返回 Date 对象的毫秒(0 ~ 999)。
+parse() 返回1970年1月1日午夜到指定日期（字符串）的毫秒数。
+setDate()   设置 Date 对象中月的某一天 (1 ~ 31)。
+setMonth()  设置 Date 对象中月份 (0 ~ 11)。
+setFullYear()   设置 Date 对象中的年份（四位数字）。
+setYear()   请使用 setFullYear() 方法代替。
+setHours()  设置 Date 对象中的小时 (0 ~ 23)。
+setMinutes()    设置 Date 对象中的分钟 (0 ~ 59)。
+setSeconds()    设置 Date 对象中的秒钟 (0 ~ 59)。
+setMilliseconds()   设置 Date 对象中的毫秒 (0 ~ 999)。
+setTime()   以毫秒设置 Date 对象。
+setUTCDate()    根据世界时设置 Date 对象中月份的一天 (1 ~ 31)。
+setUTCMonth()   根据世界时设置 Date 对象中的月份 (0 ~ 11)。
+setUTCFullYear()    根据世界时设置 Date 对象中的年份（四位数字）。
+setUTCHours()   根据世界时设置 Date 对象中的小时 (0 ~ 23)。
+setUTCMinutes() 根据世界时设置 Date 对象中的分钟 (0 ~ 59)。
+setUTCSeconds() 根据世界时设置 Date 对象中的秒钟 (0 ~ 59)。
+setUTCMilliseconds()    根据世界时设置 Date 对象中的毫秒 (0 ~ 999)。
+toSource()  返回该对象的源代码。
+toString()  把 Date 对象转换为字符串。
+toTimeString()  把 Date 对象的时间部分转换为字符串。
+toDateString()  把 Date 对象的日期部分转换为字符串。
+toGMTString()   请使用 toUTCString() 方法代替。
+toUTCString()   根据世界时，把 Date 对象转换为字符串。
+toLocaleString()    根据本地时间格式，把 Date 对象转换为字符串。
+toLocaleTimeString()    根据本地时间格式，把 Date 对象的时间部分转换为字符串。
+toLocaleDateString()    根据本地时间格式，把 Date 对象的日期部分转换为字符串。
+UTC()   根据世界时返回 1970 年 1 月 1 日 到指定日期的毫秒数。
+valueOf()   返回 Date 对象的原始值
+```
+###RegExp类型
+ECMAscript通过RegExp类型来支持正则表达式，
+var expression `/pattern/flags;`
+- flags : 三种模式 g全局模式global模式将被应用与所有字符串，而不是发现后立即停止,i(case-insensitive)模式：不区分大小写， m(multiline)多行模式，会跨行查找，一行末尾未找到到下一行继续。
+- eg：
+    var pattern1 = /at/g;
+    等价于 var pattern2 = new RegExp("[bc]at","i");//只不过RegExp不用添加转义字符。
+- 需要转义的字符（`{ [ (\^$|)?*+.]}`）
+- 
+```for(i = 0 ;i <10 ;i++){
+    re  = new RegExp("cat","g");
+    console.log(re.test("catastrophe"));
+}
+```
+ECMAscript5 规定每次使用正则表达式字面量就是第一种方法，和regexp构造方法每次都要新建实例
+比如test完了再test一次就需要再次new一个RegExp
+- 实例属性： global 布尔值，是否设置g ，
+ ignoreCase表示是否设置了i标志，
+ lastIndex整数，表示开始搜索下一个匹配项的字符位置，从0算起 ， - multiline:表示是否设置了m标志 source，正则表达式的字符串表示，字面量形式的字符串就是带转义字符的 
+
+- 实例方法主要是exec(),exec返回的数组还有两个属性，一个是index：匹配到的位置，一个是input：是输入的串。
+```
+var text = "mom and dad and baby";
+var pattern = /mom( and dad( and baby)?)?/gi;    //问号表示出现0次或一次
+
+var matches = pattern.exec(text);
+alert(matches.index);//0
+alert(matches.input);//"mom and dad and baby"  
+alert(matches[0]);//"mom and dad and baby"第一项为所有的匹配
+alert(matches[1]);//"and dad and baby"第一个捕获组的匹配 
+alert(matches[2]);//"and baby"第二个捕获组的匹配
+```
+- 捕获组就是正则表达式中`()`所括起来的匹配到的串
+- exec如果传入的pattern不是全局g，那么每次匹配只匹配第一个，如果是也只返回一个对象，再调用时从上次的地方继续匹配
+```
+text = "cat bat sat";
+pattern = /.at/g;
+matches = pattern.exec(text);
+matches = pattern.exec(text);//会向下继续匹配,一次
+
+alert(matches.index);
+alert(matches[0]);//结果是bat
+alert(matches[1]);//undefined
+```
+- 第二个方法是test() 返回是否匹配
+- RegExp实例集成的toLocalleString()和toString()都会返回其字面量，valueOf()则是返回正则表达式本身,虽然值都一样，但一个是字符串，一个是对象
+- RegExp构造函数属性 (非实例)
+长属性名    短属性名      说明
+input        $_          最近一次要匹配的字符串（输入的模式串）
+lastMatch    $&           最近一次的匹配项
+lastParen    $+          最近一次的捕获项
+leftContext  $`         input字符串中lastMatch之前的文本
+multiline    $*          是否多行模式
+rightContext $'             Input字符串中lastMatch之后的文本
+
+如：
+var text = "this has been a short summer";
+var pattern = /(.)hort/g;
+if(pattern.test(text)){
+    alert(RegExp.input);// this has been a short summer
+    alert(RegExp.leftContext);// this has been a 
+    alert(RegExp.rightContext);//  summer
+    alert(RegExp.lastMatch);// short一个完整的单词
+    alert(RegExp.lastParen);// s
+    alert(RegExp.multiline);// undefined
+
+}
+如果是使用短属性，那么因为他们不是有效的标识符，所以需要用方括号括起来如：(RegExp["$'"]);//$可以，‘不行，非ascii或者unicode字母
+
+- js的正则表达式还不是很完善缺少不少功能
+
+###Function类型
+就是一个对象，每个函数都是Function类型的对象的一个实例
+
+####三种定义方式： ① function sum(num1,num2){return sum1+sum2};
+             ② var sum  = function(num1,num2){return num1+num2};
+                alert(sum(0,1));//可以是无名的因为sum就是它的一个引用，可以向sum传参数。
+             ③ var sum = new Function("num1","num2","return num1 +num2")//不推荐，因为会解析两次，一次是解析常规的ECMAscript代码，第二次是解析传入构造函数的字符串，从而影响性能，
+
+####没有重载
+因为函数名是一个指针，所以下一次函数的定义只是覆盖了前面的函数，指向另一个函数。
+
+- 函数声明与函数表达式
+ 1.函数声明
+
+函数声明以function关键字开头，接着是必须的函数（变量）名和以逗号分隔的可选的参数列表，再接着就是以大括号封装的函数体。函数声明必须是一个单独的JavaScript语句。
+
+2.函数表达式
+
+在任何情况下都是其它JavaScript语句的一部分（比如赋值表达式等号的右侧、函数的参数）的函数被称为函数表达式。
+对于函数声明，解析器会先读取，使其在执行任何代码时都可用，函数表达式则必须执行到才会解释执行， 如
+```
+②alert(sum(10,10));
+function sum(num1,num2){return num1+num2};
+//可以正常执行
+
+②alert(sum(10,10));
+var sum = function (num1,num2){return num1+num2};
+//不可以执行
+如果右值是带函数名的就不是正确的方式。
+
+- 作为值的函数：
+函数名可以当做另一个函数的参数。
+可以返回一个函数
+如： 
+```javascript
+function createComparisonFunction(property){
+    return function(object1,object2){//将函数作为返回值，这个的目的是，为了传入三个参数，但sort的接口提供了两个参数，所以先用一个函数引入属性参数，然后直接返回这个比较的函数，所以createComparison相当于提供了一个参数的作用
+        var value1 = object1[property];
+        var value2 = object2[property];
+
+        if(value1 < value2)     return -1;
+        else if(value1 > value2) return 1;
+        else return 0
+    }
+ }
+ var data = [{name:"Zhan",age:19},{name:"Roger",age:36}];
+ data.sort(createComparisonFunction("name"));
+ alert(data[0].name);//roger
+
+```
+####函数内部属性
+- 两个特殊对象
+ 1.arguments，如第三章所说是一个类数组对象，它有;一个callee属性，是一个指针，指向拥有arguments对象的函数如定义阶乘函数的内部就可以把factorial改成arguments.callee，消除了函数的执行与函数名紧密耦合的现象。这样如果原来的函数名指向另一个函数，只要之前有其他函数接收原来的就不会出错
+ 2.this指针：指向函数执行的环境对象，
+- caller:ECMAscript 5也规范化了另一个函数对象的属性，caller,在全局中使用会返回null，在内部使用alert（函数.caller）;会返回函数源代码。这个属性也不可以赋值
+
+####函数属性和方法
+每个实例函数都包括两个属性：length，和prototype，length就是函数希望接受的参数个数，prototype最耐人寻味，因为prototype是保存实例方法的所在地，所有的如toString(),valueOf()都保存在prototype下，且其不可枚举也就是用for in无法发现。
+- call() apply()方法，两个非继承而来的方法，用途是在特定的域内调用函数，call和apply的第一个参数都是`调用函数的内部使用this指针时this所指的对象，和arguments没关系`，apply的另一个是参数数组，call的则是分开的几个数组。  call和apply还可以扩大函数的作用域。
+eg:
+```javascript
+    
+    function sum(a,b){return a+b;}
+    function applysum1(a,b){return sum.apply(this,arguments);}
+    function applysum2(a,b){return sum.apply(this,[a,b]);}
+    function callsum(a,b){return sum.call(this,a,b;}
+    alert(applysum1(10,10));//由于sum是在全局作用域window的，是window对象调用sum方法所以this是指向window的，结果为20，下同
+    alert(applysum2(10,10));//20
+    alert(callsum(10,10));//20
+
+
+```
+- 默认this指向window,如果不明确把函数添加到某个对象，在严格模式下就是undefined
+
+- bind()方法，会创建一个函数的实例，this值是bind的对象，如： ```
+```javascript
+window.color = "red";
+var o = {color:"blue"};
+function saqColor(){
+    alert(this.color);
+}
+var obj = sayColor.bind(o);
+obj();//blue
+```
+
+###基本包装类型（也是引用类型）
+  为了方便操作基本类型值，ECMAscript提供了三个特殊的引用类型：Boolean,Number,String.这些类型和本章介绍的其他引用类型相似，但同时也具有各自的基本类型相应的特殊行为。每当读取到一个基本类型值时，后台就会创建一个对应的基本包装类型对象，方便能调用一些方法操作数据
+当读取到上面三个对应的基本类型的操作时，后台会自动完成三个操作：
+1.创建string基本包装类型的一个实例
+2.在这个实例上调用指定的方法
+3.销毁这个实例。
+- 可以显式地调用String等基本包装类型，但是不建议，因为会人混乱。
+- Object构造函数得到一个基本String类型的方式：obj = new Object("some text");
+alert(obj instanceof String);//true
+但是非显式的建立就是false。
+
+-Boolean类型
+重写了valueOf()返回基本类型值true或false，toString()返回字符串"true","false"
+尽量永远不要使用Boolean对象，因为容易出问题，比如：
+var falseObj = new Boolean(false);
+result = falseObject && true;
+alert(result);//true 因为falseObj是一个对象，所以返回的值是true
+
+- Number类型
+重写了valueOf()返回对象的基本类型值，toLocalString()和toString（）则返回字符串形式的数值， toString还可以传递转换成几进制的字符串形式如obj.toString(2);
+
+toFixed(小数点后位数)固定大小格式方法，可以设置显示几位小数，会自动舍入不同的浏览器的规定不同。
+toExponential(小数点后位数)指数格式方法，可以转化为指数显示法
+toPrecision(数的位数)方法会选择性的返回适合的以上两种格式
+如 var num  = 99;
+alert(num.toPrecision(1));//1e+2
+- 同样不建议直接实例化对象
+
+- String类型（基本包装类型）
+1.字符方法 
+charAt();返回基于0开始的位置 
+var string  = "king james";
+alert(string.charAt(1));//i
+也可以通过[]索引获得
+
+
+charCodeAt返回对应的ascii码值
+
+2.字符串操作方法
+和Array一样有 concat,可以多个参数拼接
+还有slice(开始，结束):返回基于0,结束值不包括 开始到结束的串，参数为负数时返回加一次长度
+substring(开始，结束)：和slice相似不过负数时返回0
+substr(开始，个数)：第一个参数负数就加长度，第二个负数就置0
+eg:
+```
+var str = "hello world";
+alert(str.slice(-3));//rld
+alert(str.substring(-3));//hello world
+alert(str.substr(-3));//rld
+alert(str.slice(3,-4));//lo w
+alert(str.substring(3,-4));//“hel”
+alert(str.substr(3,-4));//""空
+```
+
+3.字符串位置方法
+var str = "hello world";
+alert(str.indexOf("o"));//4    向前index返回位置，基于0
+alert(str.lastIndexOf("o"));//7    向前index返回位置
+alert(str.indexOf("o"，6));//7  从位置6开始。
+alert(str.lastIndexOf("o"，6));//4
+
+4.trim()方法修剪
+ECMAscript5为所有字符串定义了trim()方法，会创建一个字符串的副本，删除前置和后缀的空格
+
+5.字符串大小写转换方法
+toLowerCase():全部转成小写  toLocaleLowerCase()//针对地区的转法，如果不确定环境，则用toLocale
+toUperCase():全转大写
+
+6.字符串的模式匹配
+- match(pattern);//RegExp和exec()方法第一项一样，只不过RegExp数组后面的的是捕获组
+search(pattern);//和match类似，只不过match返回的对象可以有属性.index索引值和对应的匹配串，而search则是索引值，非对象。
+
+- replace()方法 ,第一个参数为字符串或者正则，第二个为一个字符串或者函数
+```javascript
+var text = "cat bat sat fat";//第一个参数为字符串
+var result = text.replace("at","ond");
+alert(result);//"cond bat sat fat"
+var result1 = text.replace(/at/g,"ond")
+alert(result1);//"cond bond sond fond"  使用全局模式的正则就可以全改
+```
+当第二个参数为字符串
+var text = "cat bat sat rat";
+result = text.replace(/(.at)/g,"word($$)");//替换文本为$
+alert(result);// word($) word($) word($) word($)
+result = text.replace(/(.at)/g,"word($&)");//替换文本为匹配整个模式的字符串，与lastMatch值相同
+alert(result);// word(cat) word(bat) word(sat) word(rat)
+result = text.replace(/(.at)/g,"word($')");//  替换文本为匹配子字符串之后的所有字符串，与RegExp.rightContex的值相同
+alert(result);//word( bat sat rat) word( sat rat) word( rat) word()
+result = text.replace(/(.at)/g,"word($`)");//  替换文本为匹配子字符串之前的所有字符串，与RegExp.leftContex的值相同
+alert(result);//word() word(cat) word(cat bat) word(vat bat sat)
+result = text.replace(/(.at (bat))/g,"word($2)");//  捕获第n个捕获组的字符串
+alert(result);// word(bat) sat rat
+
+当第二个参数为函数时，就是编写一个函数返回替代的值，函数的自动传入参数为match匹配项，pos匹配位置，originalText为原始字符串
+
+- split方法：两个参数，第一个是用于切割的字符串或者正则，第二个是切割出来的数组元素个数
+var color = "red,orange,yellow,green";
+colors = color.split(/[^\,]+/,3);//^出现在开头表示字符边界，在中括号开头表示非，在其它地方就表示字符^,这句话意思就是不是以逗号开头的，所以切下来就是两边空白中间都是逗号
+colors.forEach(function (item,index){console.log(item)}); "",",",",",",",""
+
+7.localeCompare()方法
+- 字符串操作的最后一个方法就是这个，用于比较两个字符串的大小  
+eg:
+var str = "yes"
+str.localeCompare("no");//-1  大于就返回-1, 说明no在它之前
+//具体的比较由具体地区决定
+
+8.fromCharCode()
+- 另外，string构造函数还有一个静态方法： fromCharCode()与charCodeAt()执行的是相反的操作
+string.fromCharCode(104,101.108,108,111);//返回hello;
+
+9.html方法
+动态格式化html，尽量避免使用，因为他们创造的标记通常无法表达语义
+如big("string"); 就变成<b>string</b>
+
+###单体内置对象
+-由Ecmascript实现提供的不依赖宿主环境的对象，他们已经实例化了，如Object,Array,String 除此之外还有Global和Math   （js中这些类型也是对象，相当于大的引用类型的对象）
+
+####Gloal对象
+最特别的对象，从哪个角度看都是不存在的，不属于任何其他对象的属性和方法，都是它的属性和方法，如全局变量和全局函数,所有的构造函数 isNaN(),isFinite,parseFloat()都是全局对象的方法
+1.URI编码方法，
+Global对象的encodeURI()和encodeURIComponent()可以对URI通用资源标识符进行编码，以便发给浏览器，只不过encodeURI()不会对本身属于URI的特殊字符进行编码，只是诸如非法的空格替换成%20，而encodeURIComponent()则会编码
+对应的两个解码方法是：decodeURI()和decodeURIComponent()
+
+2.eval()
+大概是整个ECMAscript中最强大的方法相当于执行()内字符串的内容
+如eval("alert('hi')");就相当于alert('hi');//与调用的环境有相同的作用域链
+如：eval("function sayHi(){ alert('hi');}");
+sayHi();能正常执行，而在严格模式下不行，因为window中不能访问当eval函数中的变量或函数
+/*要特别小心，因为如果是用户输入数据就可能产生代码注入*/
+
+3.window对象
+ECMAscript没有指定如何直接访问Global对象，但web浏览器中都是把它当做window的一部分加以实现，所以再全局作用域声明的所有变量和函数，都成了window的属性，
+另一种取得global对象的方法：
+var global = function(){
+    return this;
+}();//使用了函数表达式在第7章中讲解
+
+4. Math对象
+为保存数学公式和信息提供了一个公共的位置。Math对象提供的计算功能执行起来比我们直接编写的要快的多
+Math 对象属性
+属性  描述
+E   返回算术常量 e，即自然对数的底数（约等于2.718）。
+LN2 返回 2 的自然对数（约等于0.693）。
+LN10    返回 10 的自然对数（约等于2.302）。
+LOG2E   返回以 2 为底的 e 的对数（约等于 1.414）。
+LOG10E  返回以 10 为底的 e 的对数（约等于0.434）。
+PI  返回圆周率（约等于3.14159）。
+SQRT1_2 返回返回 2 的平方根的倒数（约等于 0.707）。
+SQRT2   返回 2 的平方根（约等于 1.414）。
+Math 对象方法
+方法  描述
+abs(x)  返回数的绝对值。
+acos(x) 返回数的反余弦值。
+asin(x) 返回数的反正弦值。
+atan(x) 以介于 -PI/2 与 PI/2 弧度之间的数值来返回 x 的反正切值。
+atan2(y,x)  返回从 x 轴到点 (x,y) 的角度（介于 -PI/2 与 PI/2 弧度之间）。
+ceil(x) 对数进行上舍入。
+cos(x)  返回数的余弦。
+exp(x)  返回 e 的指数。
+floor(x)    对数进行下舍入。
+log(x)  返回数的自然对数（底为e）。
+max(x,y)    返回 x 和 y 中的最高值。
+min(x,y)    返回 x 和 y 中的最低值。
+pow(x,y)    返回 x 的 y 次幂。
+random()    返回 0 ~ 1 之间的随机数。
+round(x)    把数四舍五入为最接近的整数。
+sin(x)  返回数的正弦。
+sqrt(x) 返回数的平方根。
+tan(x)  返回角的正切。
+toSource()  返回该对象的源代码。
+valueOf()   返回 Math 对象的原始值。
+
+var max  = Math.max(1,2,3,4)//4
+等价
+var max = Math.min.call(Math,1,2,3,4) //要在Math环境下的min内调用
+
+func () { ... this. ... } 
+func.apply(obj(this), ...) Math.max内部不依赖this，所以例子中无论是window还是null都没有差别；下面的代码就不是这样了 
+```
+ var Lib = {  
+  doA: function () {},  
+  doB: function () {  
+    this.doA();
+   } 
+   }; 
+Lib.doB.apply(Lib, []); //OK
+Lib.doB.apply(window,[]);//ERROR
+Lib.doB.apply(this,[]);//ERROR是window     apply的第一个参数是修改调用函数的this指针,本来apply就是用来在不同的域调用函数，这样刚好实现
+```
+
+如果你想得到一个1-10的整数值可以
+Math.floor(Math.random()*10+1)

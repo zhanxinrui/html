@@ -1,0 +1,6 @@
+第六章概括方法
+defineProperty(object,"属性"，{特性1：；特性2:});//设置特性
+defineProperty(对象，"{属性1：{特性1：；特性2：}，属性2：{特性1：；特性2：}}");
+读取属性的特性使用Object.getOwnPropertyDescriptor()方法
+判断是否是of后的prototype对象 isPrototypeOf来说明实例的[[prototype存在]]
+getPrototypeOf()返回原型对象和对象.prototype属性所指的原型对象进行比较

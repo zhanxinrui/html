@@ -1,0 +1,36 @@
+var color = "red";
+var obj = {
+    color: "pink",
+    getColor: function() {
+        return function() {
+            return this.color
+        }
+    }
+}
+alert(obj.getColor()()); //弹出red
+为什么这个匿名函数会属于window对象？
+JS高程上说匿名函数的执行环境具有全局性？我取匿试了试了下
+最里面的函数还是属于winddow对象，弹出的还是red。
+2016年10月13日提问评论邀请回答编辑
+
+ 
+
+4个回答
+
+
+这个, 属于闭包中函数上下文的内容.
+
+要深究他的原因, 其实也比较简单.
+
+this指向一个对象， 就是函数执行时的上下文（环境中变量的对象）, 注意是执行时的上下文, 跟函数定义没有关系.
+
+getColor函数返回了这个匿名函数, 匿名函数再执行.
+
+我们理一下:
+
+getColor被obj对象调用.
+此时函数已经执行了, getColor函数的this就指向了obj.
+getColor返回的函数继续执行.
+你告诉我这个函数是被谁调用的? 是obj吗? 显然不是. 
+那为何你会觉得他的this要指向obj呢?
+由于此时函数直接在全局环境中执行, 那么他的this对象就指向了window对象. 必然弹出red.!

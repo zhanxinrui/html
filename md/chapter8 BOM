@@ -1,0 +1,224 @@
+###window对象
+BOM的核心对象是window，它表示浏览器的一个实例，它既是通过js访问浏览器窗口的一个借口，又是ES规定的Global对象， 网页中的任何一个对象，都以window作为其Global对象，,因此有权访问pareseInt()等方法
+
+####全局作用域  
+- 由于window对象同时扮演者Global对象的角色因此所有在全局作用域声明的变量，函数都会变成window对象和属性和方法。
+
+var age = 29 ;
+function sayAge(){
+    alert(this.age);
+}
+
+alert(window.age);  //29
+sayAge();     //29
+window.sayAge();  //29
+- 全局变量不能通过delete删除（因为configurable特性为false），而在window对象上定义的属性可以。
+- 尝试访问为声明的变量会出错，但是可以查询对象的属性判断变量是否存在。  
+####窗口关系及框架
+
+```javascript
+<html>
+<head>
+<title>Frameset Example</title>
+</head>
+<frameset rows = "160,*">
+    <frame src = "frame.htm" name = "topFrame">
+    <frameset cols = 50%,50%>
+<frame src = "anotherframe.htm" name  = "leftFrame">
+<frame src = "yetanotherframe.htm" name  = "rightFrame">
+    </frameset>      
+</frameset>
+</html>
+```
+
+可以通过window.frame[0]或window.frames["topFrame"]来引用上方的框架，最好用top.frames[0]或top.frames["topFrame"]因为top对象始终指向最高层的框架，也就是浏览器窗口，window则指向的都是那个框架的特定实例。
+- 与top相对的是另一个window对象 parent,parent始终指向当前框架的直接上层框架，可以在嵌套框架中使用
+
+####窗口位置 
+IE,Safari,Opera,Chrome提供了screenLeft和ScreenTop属性，分别表示窗口相对于屏幕左边和上边的位置，Firefox则在screenX和screenY提供相同位置信息，
+使用时可以：
+```javascript
+    var leftPos = (typeof window.screenLeft == "number") ? window.screenLeft:window.screenX;
+    var topPos = (typeof window.screenTop == "number") ?
+    window.screenTop : window.screenY
+```
+浏览器在对这些值的定义上还有些许不同。见p197
+- moveTo() moveBy()方法，将窗口精确的移动到一个新的位置。  
+- window.moveTo(0,0)//  将窗口移动到屏幕左上角  
+- window.moveB(0,100)//将窗向下移动100像素
+
+####窗口大小
+- IE9+ Firfox Safari Opera和Chrome均为此提供了： innerWidth,innerHeight,outWidth,outerHeight
+- 在IE9+ Firfox Safari中outerWidth outerHeight返回浏览器本身的尺寸。
+Opera中是页面视图容器大小，即单个标签页对应的浏览器窗口， 在chrome中，这四个值返回的是相同的值，即视口大爱小而非浏览器窗口大小。
+- 在IE,Firefox，Safari,Opera和Chrome中，document.documentElement.clientWidth和document.documentElement.clientHeight中保存了页面视口的信息，
+- resizeTo()和resizeBy()方法可以调整浏览器的窗口的代销
+ window.resizeTo(100,100)//调整到100*100
+ window.resizeBy(100,50)//调整到200*150
+ 只适用最外层的window对象使用，不适用于框架。
+
+####导航和打开窗口
+- 使用window.open()方法既可以导航到一个特定的URL，也可以打开一个新的浏览器窗口，这个方法可以接受四个参数，`要加载的URL，窗口目标，一个特性字符串，一个表示新页面是否取代浏览器历史记录中当前加载页面的布尔值`，通常只须传递第一个参数，最后一个参数只在不打开新窗口的情况下使用。
+- 如果第二个参数时已有的窗口或框架的名称，那么就会在具有该名称的窗口加载第一个参数指定的URL，如果第二个参数并不存在这样的窗口或框架，那么就会根据在第三个参数传入的字符串创建一个新窗口或新标签页，
+1.弹出窗口
+如： ```javascript
+ window.open("http://www.wrox.com","wroxWindow","height = 400,width=400",left = 10 ,resizable= yes")
+
+```
+
+有些浏览器在默认情况下可能不允许我们针对主浏览器窗口调整大小和位置，但是 window.open()方法会返回一个指向新窗口的引用。调用close()方法可以关闭新打开的窗口，  
+可以检测其closed属性判断是否关闭.  opener属性可以得到打开它的原始窗口对象。但是原始窗口并没有指针指向弹出窗口。只能手动实现跟踪。 有些浏览器会在独立的进程中运行每个标签页，在chrome中，将新创建的标签页的opener属性设置为null,即表示在单独的进程中运行新标签页。也就是告诉浏览器新创建的标签页不需要与打开它的标签页通信，，因此可以在独立的进程中运行，
+2.安全限制
+- 由于广告商弹出窗口肆无忌惮，所以浏览器进行了限制弹出窗口的设置，
+3.弹出窗口屏蔽程序
+    大多数浏览器都内置有弹出窗口屏蔽程序，也可以安装插件实现，如果是浏览器内置的屏蔽程序组织的弹出窗口，那么window.open很可能会返回null,此时，只要检测这个返回的值就可以确定弹出的窗口是不是被屏蔽了。
+```javascript
+    var wroxWin = window.open("http://www.wrox.com","_blank");
+    if(wroxWin==null){
+    alert("The popup was blocked!");
+}
+```
+如果是其他的拓展插件组织的，window.open通常会给出一个错误，
+检测方法：
+```javascript
+    var blocked = false;
+    try {
+    var wroxWin = window.open("http://www.wrox.com","_blank");
+     if(wroxWin==null){
+    blocked = true;
+    }
+    catch(ex){
+    blocked = true;
+    }
+    if(blocked){
+    alert("The popup was blocked!");
+    }
+}
+```
+- 以上的代码只是能检测出是否屏蔽，并不会组织浏览器显示与被屏蔽的弹出窗口有关的消息。
+
+####间歇调用和超时调用
+- js是单线程语言，但他允许通过设置超时值和间歇时间值来调度代码在特定的时刻执行，前者是在指定的时间过后执行，后者是隔一段时间执行。
+-超时调用使用setTimeout() 接受两个参数，要执行的代码和以毫秒表示的时间。
+setTimeout(function(){
+    alert("hw!");
+},1000);
+- 使用clearTimeout()可以取消尚未执行的超时调用计划。
+- 间歇调用使用setInterval()，clearInterval()用来清除。
+####系统对话框
+alert() confirm() prompt() 
+confirm返回布尔值，prompt返回字符串
+
+###location对象
+- location是最有用的BOM对象之一，它提供了与当前窗口中加载的文档有关的信息，还提供了一些 
+导航功能，它既是window对象的属性，又是document对象的属性。
+
+<table>
+  <tr>
+    <th width=10%, bgcolor=yellow >属性</th>
+    <th width=40%, bgcolor=yellow>例子</th>
+    <th width="50%", bgcolor=yellow>说明</th>
+  </tr>
+  <tr>
+    <td bgcolor=rgb(0,10,0)> hash </td>
+    <td> "#contents"  </td>
+    <td> 返回URL中的hash，如果URL不包含散列，返回字符串  </td>
+  </tr>
+  <tr>
+    <td bgcolor=rgb(0,10,0)>host </td>
+    <td> "www.wrox.com:80" </td>
+    <td> 返回服务器名称和端口号</td>
+  <tr>
+    <td bgcolor=rgb(0,10,0)> hostname </td>
+    <td> "www.wrox.com"</td>
+    <td>  不带端口号的服务器名称 </td>
+  </tr>
+   <tr>
+    <td bgcolor=rgb(0,10,0)> href</td>
+    <td> "http://www.wrox.com"</td>
+    <td>  完整的URL </td>
+  </tr>
+   <tr>
+    <td bgcolor=rgb(0,10,0)> search </td>
+    <td> "?q = javascript"</td>
+    <td> 返回URL的查询字符串，这个字符串以问号开头 </td>
+  </tr>
+</table>
+
+
+
+####查询字符串参数
+- 虽然通过上面的属性可以得到查询字符串，但是无法得到一个一个分离的，可以自己写一个函数
+```javascript
+function getQueryStringArgs(){
+    var qs = (location.search.length)>0? location.search.substring(1):"")
+    args = {};
+    items = qs.length?qs.split("&"):[];
+    item = null;
+    name = null;
+    value = null;
+    for(var i = 0,len= items.length ; i < len;i++)
+    {
+      item = items[i].split("=");
+      name = decodeURIComponent(items[0]);
+      value = decodeURIComponent(items[1]);
+      if(name.length){
+      args[name] = value;
+      } 
+    }
+    return args;
+}
+```
+####位置操作
+location.assign("http://www.wrox.com");
+也可以通过修改各个href和hash等值修改相应的地方。
+replace方法禁止回退到上一页
+reload方法重载页面。reload()可能会通过缓存重载，而reload(true)则通过服务器强制重载
+
+###navigator对象
+- 有一套自己的属性，反映了浏览器的各种属性
+![image][http://www.w3school.com.cn/jsref/dom_obj_navigator.asp] 
+
+####检测插件
+- 对于非IE可以用plugins数组获取，对于IE使用ActiveXObject(name);//name是COM对象的唯一标识符，Flash的标识符时ShockwaveFlash.ShockwaveFlash,  
+- 新建一个对象，使用try,catch来判断是否存在一个这样的对象。
+```javascript
+//非IE中
+function hasPlugin(name){
+    name = name.toLowerCase();
+    for(var i = 0; i< navigator.plugins.length;i++){
+    if(navigator.plugins[i].name.toLowerCase().indexOf(name) > -1){
+       return true;
+      }
+    }
+    return false;
+}
+alert(hasPlugin("Flash"));
+//检测Flash
+```
+function hasIEPlugin(name){
+    try{
+        new ActiveXObject(name);
+        return true;
+    } catch (ex){
+        return false;
+    }
+}
+
+
+alert(hasIEPlugin("ShockwaveFlash.ShockwaveFlash"))
+```
+
+####注册处理程序
+- Firefox 2 为navigator对象新增了registerContentHandler()和registerProtocolHandler()方法可以攘夷个站点知名他可以处理特定类型的信息。
+- registerContentHandler()接收三个参数，第一个是要处理的MIME类型，可以处理该MIME类型的页面的URL一级应用程序的名称。
+registerProtocolHandler()也接收三个参数，第一个是要处理的协议，处理洗衣页面的URL一级应用程序的名称。
+要想讲一个应用程序注册为默认的邮件客户端可以：
+navigator。registerProtocolHandler('mailto','http://www.somemailclient.com?cmd=%s',"Some Mail Client")
+
+###history对象
+history对象保存着用户上网的记录，是window的对象，出于安全考虑开发人员无法得知用户浏览的uRL，但是有go()方法，可以不需要url
+history.go(-1);//后退一页
+history.go("zhanxinrui.top");//跳转到最近的zhanxinruiltop页面
+还可以用back和forward()来替代go()
+- 除此之外，还有一个length属性，保存着历史记录的数量。

@@ -1,0 +1,8 @@
+function apply1(num1, num2){
+    return sum.apply(this, [num1, num2]);
+    }
+function call1(num1, num2){
+    return sum.call(this, num1, num2);
+
+    }
+    bind只不过不是立即执行的
