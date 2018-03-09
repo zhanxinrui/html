@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script>
+var o = {
+    toString: function(){
+    return "im a string";
+    }
+};
+for(var prop in o ){
+    if(prop == "toString"){
+    alert("I found");//
+    }
+
+}
+</script>
+</body>
+</html>

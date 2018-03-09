@@ -1,0 +1,12 @@
+<html>
+<head>
+<title>Frameset Example</title>
+</head>
+<frameset rows = "50,*">   <！--代表纵向比例，50代表占50px，*代表默认分配-->
+    <frame src = "frame.htm" name = "topFrame">
+    <frameset cols = 30%,50%>
+<frame src = "anotherframe.htm" name  = "leftFrame">
+<frame src = "yetanotherframe.htm" name  = "rightFrame">
+    </frameset>      
+</frameset>
+</html>

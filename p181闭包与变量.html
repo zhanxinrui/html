@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+
+<script>
+function f(){
+    var result = new Array();
+    for(var i = 0 ;i < 10; i++){
+      result[i] = function(num){//传进去的num值不同，
+        return function(){
+          return num;
+        
+      }(i);
+    }
+         alert(result[2]());
+
+}
+f();
+function f1(){
+    var result = new Array();
+    for(var i = 0 ;i < 10; i++){
+      result[i] = function(){
+      return i;//result数组结果全是10，因为闭包引用的是i所以最后i是10，返回最后的i值
+   }; 
+
+  }
+  return result;
+
+}
+//var r = f1();
+ //  alert(r[2]());
+
+
+</script>
+</head>
+<body>
+
+</body>
+</html>

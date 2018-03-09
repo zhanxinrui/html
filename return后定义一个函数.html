@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script>
+ function createComparisonFunction(property){
+ 	return function(object1,object2){
+ 		var value1 = object1[property];
+ 		var value2 = object2[property];
+
+ 		if(value1 < value2)		return -1;
+ 		else if(value1 > value2) return 1;
+ 		else return 0
+ 	}
+ }
+ var data = [{name:"Zhan",age:19},{name:"Roger",age:36}];
+ data.sort(createComparisonFunction("name"));
+ alert(data[0].name);
+</script>
+</body>
+</html>

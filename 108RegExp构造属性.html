@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script>
+var text = "this has been a short summer";
+var pattern = /(.)hort/g;
+if(pattern.test(text)){
+    alert(RegExp.input);// this has been a short summer
+    alert(RegExp.leftContext);// this has been a 
+    alert(RegExp.rightContext);//  summer
+    alert(RegExp.lastMatch);// short,一个完整的单词
+    alert(RegExp.lastParen);// s
+    alert(RegExp.multiline);// false
+
+}
+</script>
+</body>
+</html>

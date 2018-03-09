@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+<script> 
+function domain(){
+	person = {name:"yhb",age:22,wife:{name:"lwu"}};
+	
+	with(person.wife){
+		var name = "www";
+		alert(name);
+		//name = "kw";
+	}
+	alert(person.wife.name);
+}
+domain();
+</script>
+</body>
+</html>

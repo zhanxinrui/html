@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script>
+var color = "red,orange,yellow,green";
+colors = color.split(/[^\,]+/,3);//^出现在开头表示字符边界，在中括号开头表示非，在其它地方就表示字符^,这句话意思就是不是以逗号开头的，所以切下来就是两边空白中间都是逗号
+colors.forEach(function (item,index){console.log(item)}); "",",",",",",",""
+</script>
+</body>
+</html>

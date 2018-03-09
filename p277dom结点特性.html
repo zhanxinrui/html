@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>
+var element = document.createElement("div");
+
+var attr = document.createAttribute("align");
+attr.value = "left";
+element.setAttributeNode(attr);//setAttribute("align"，"left") 也可以 ,element.attributes["id"].align = "left"也可以
+alert(element.attributes["align"].value);//left
+alert(element.getAttributeNode("align").value);//left，也等同于element.attribu tes.getNamedItem("value").nodeValue;
+alert(element.attributes.getNamedItem("align").nodeValue);
+alert(element.attributes.getNamedItem("align").value);//nodeValue适用于“文本节点”和“属性节点”；对应“文档节点”和“标签节点”不起作用
+alert(document.value);//undefined
+alert(document.nodeValue);//null
+alert(element.getAttribute("align"));//left
+	</script>
+</head>
+<body>
+
+</body>
+</html>

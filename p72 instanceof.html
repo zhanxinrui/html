@@ -1,0 +1,25 @@
+<html><!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script> 
+	function setName(obj){
+		obj.name =' Nicholas' ;
+		obj = new Object();
+		obj.name = "Greg";
+
+	}
+	var person  = new Object();
+	name = 'asdf';
+	var name1 = new String("sdfsaf");
+	setName(person);
+	alert(typeof person.name);//string
+	alert(person.name instanceof String);//false
+	alert(name instanceof String);//false
+	alert(name1 instanceof String);//true
+
+</script>
+</body>
+</html></html>

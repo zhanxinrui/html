@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+<script> 
+var o={href:"sssss"};  
+var href="1111";  
+function buildUrl(){  
+     var qs="?debug=true";       
+     with(o){  
+          href="2222";  
+          var url=href+qs;  
+     }      
+     return url;  
+}  
+var result=buildUrl();  
+alert(result);  
+alert(href);  
+</script>
+</body>
+</html>

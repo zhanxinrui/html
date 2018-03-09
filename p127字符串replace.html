@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script>
+var text = "cat bat sat rat";
+result = text.replace(/(.at)/g,"word($$)");//替换文本为$
+alert(result);// word($) word($) word($) word($)
+result = text.replace(/(.at)/g,"word($&)");//替换文本为匹配整个模式的字符串，与lastMatch值相同
+alert(result);// word(cat) word(bat) word(sat) word(rat)
+result = text.replace(/(.at)/g,"word($')");//  替换文本为匹配子字符串之后的所有字符串，与RegExp.rightContex的值相同
+alert(result);//word( bat sat rat) word( sat rat) word( rat) word()
+result = text.replace(/(.at)/g,"word($`)");//  替换文本为匹配子字符串之前的所有字符串，与RegExp.leftContex的值相同
+alert(result);//word() word(cat) word(cat bat) word(vat bat sat)
+result = text.replace(/(.at (bat))/g,"word($2)");//  捕获第n个捕获组的字符串
+alert(result);// word(bat) sat rat
+</script>
+</body>
+</html>

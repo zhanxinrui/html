@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script>
+        'use strict';
+
+    window.loadStockData = function (r) {
+        var NUMS = 30,
+            data = r.data;
+        if (data.length > NUMS) {
+            data = data.slice(data.length - NUMS);
+        }
+        data = data.map(function (x) {
+            return {
+                date: x[0],
+                open: x[1],
+                close: x[2],
+                high: x[3],
+                low: x[4],
+                vol: x[5],
+                change: x[6]
+            };
+        });
+        window.drawStock(data);
+    }
+
+    window.drawStock = function (data) {
+           var canvas = document.getElementById('stock-canvas');
+           var width = canvas.width;
+           var height = canvas.height;
+           var ctx = canvas.getContext('2d');
+        console.log(JSON.stringify(data[0])); // {"date":"20150602","open":4844.7,"close":4910.53,"high":4911.57,"low":4797.55,"vol":62374809900,"change":1.69}
+        // 清空画布
+        ctx.clearRect(0, 0, width, height);
+        // 画上背景
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = 'red';
+        ctx.fillText('Test Canvas', 10, 10);
+        var highestY=data.reduce(function(x,y){return x.high>y.high?x:y}).high;
+        var lowestY = data.reduce(function(x,y){return x.low<y.low?x:y}).low;
+        var offsetY = highestY-lowestY;
+        //alert(offsetY);
+        var perWidth = width/data.length;
+        for(let i = 0 ;i < data.length; i++){
+        function getRealY(point){return (highestY-point)*offsetY/height};
+       // ctx.fillRect(0,(data[0].open-data[0].highestY)*offsetY/(height-60)+60,perWidth,(data[0].open-data[0].close)*offsetY/(height-60))
+      //  ctx.beginPath();
+        var openY =  getRealY(data[i].open);
+        //alert(openY);
+        var closeY = getRealY(data[i].close);
+        var highY =  getRealY(data[i].high) ;
+        var lowY = getRealY(data[i].low) ;
+        var x = (i-1)*perWidth;
+        if(openY<closeY){
+            ctx.fillStyle = '#F65655';
+            ctx.strokeStyle = '#F65655';
+        }
+        else {
+            ctx.fillStyle = '#56F1F2';
+            ctx.strokeStyle = '#56F1F2';
+        }
+        ctx.fillRect(x,openY,perWidth,closeY-openY);
+        ctx.beginPath();
+        ctx.moveTo(x+perWidth/2, highY);
+        ctx.lineTo(x+perWidth/2, lowY);
+        ctx.stroke();
+
+    }
+
+    };
+
+    // 加载最近30个交易日的K线图数据:
+    var js = document.createElement('script');
+    js.src = 'http://img1.money.126.net/data/hs/kline/day/history/2015/0000001.json?callback=loadStockData&t=' + Date.now();
+    document.getElementsByTagName('head')[0].appendChild(js);
+    </script>
+</head>
+<body>
+<canvas id="stock-canvas" width="800" height="400"></canvas>
+</body>
+</html>
